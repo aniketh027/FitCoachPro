@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - FitCoach Pro</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── CSS VARIABLES ── */
+    :root {
+      --gold: #F5C518;
+      --gold-dim: #B8950F;
+      --gold-soft: rgba(245, 197, 24, 0.12);
+      --bg: #0E0E0E;
+      --bg2: #161616;
+      --bg3: #1E1E1E;
+      --bg4: #252525;
+      --text: #F0F0F0;
+      --text-muted: #888;
+      --text-dim: #555;
+      --success: #4CAF50;
+      --danger: #E53935;
+      --info: #42A5F5;
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14, 14, 14, 0.97);
+      border-bottom: 1px solid rgba(245, 197, 24, 0.1);
+      padding: 0 28px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+
+    .nav-avatar-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      object-fit: cover;
+    }
+
+    #navName {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text) !important;
+    }
+
+    #logoutBtn {
+      background: transparent;
+      border: 1px solid var(--text-dim);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    #logoutBtn:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .dashboard-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 60px;
+    }
+
+    /* ── HEADER SECTION ── */
+    .dash-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .dash-greeting {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .dash-username {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 1px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .dash-username span {
+      color: var(--gold);
+    }
+
+    .dash-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .split-badge {
+      background: var(--bg3);
+      border: 1px solid var(--bg4);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── NEW: Level & Training badges ── */
+    .pref-badge {
+      background: #1a2535;
+      border: 1px solid #2a3f5f;
+      color: #7eb8f7;
+    }
+
+    .bmi-badge {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .bmi-cat {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-left: 6px;
+      background: #E53935;
+      color: #fff;
+    }
+
+    .bmi-cat.normal {
+      background: #4CAF50;
+    }
+
+    .bmi-cat.overweight {
+      background: #FF9800;
+    }
+
+    /* ── HEADER ACTIONS ── */
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 1px solid var(--bg4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      color: var(--text-muted);
+      font-size: 1rem;
+      text-decoration: none;
+    }
+
+    .btn-icon:hover {
+      background: var(--bg4);
+      color: var(--text);
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--bg4);
+    }
+
+    .stat-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .stat-icon {
+      font-size: 1.4rem;
+    }
+
+    .stat-label-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 10px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-active {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .badge-total {
+      background: var(--bg4);
+      color: var(--text-muted);
+    }
+
+    .badge-intensity {
+      background: var(--bg4);
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .stat-bar-row {
+      display: flex;
+      gap: 5px;
+    }
+
+    .stat-bar-seg {
+      height: 4px;
+      border-radius: 2px;
+      flex: 1;
+      background: var(--bg4);
+    }
+
+    .stat-bar-seg.filled {
+      background: var(--gold);
+    }
+
+    .stat-bar-seg.filled-dim {
+      background: var(--gold-dim);
+    }
+
+    .stat-bar-seg.filled-muted {
+      background: #6D5E00;
+    }
+
+    /* ── DAY TABS ── */
+    .day-tabs-wrapper {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 22px;
+      overflow-x: auto;
+    }
+
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      min-width: max-content;
+    }
+
+    .day-tab {
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .day-tab:hover {
+      color: var(--text);
+      background: var(--bg3);
+    }
+
+    .day-tab.active {
+      background: var(--gold);
+      color: #000;
+    }
+
+    /* ── WORKOUT SECTION ── */
+    .workout-section {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .workout-section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .workout-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+    }
+
+    .workout-section-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .ex-count-badge {
+      background: var(--gold);
+      color: #000;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    /* ── EXERCISE LIST ── */
+    .exercise-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .exercise-item {
+      display: flex;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s;
+      cursor: pointer;
+      gap: 14px;
+    }
+
+    .exercise-item:hover {
+      background: var(--bg3);
+    }
+
+    .ex-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .ex-info {
+      flex: 1;
+    }
+
+    .ex-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .ex-detail {
+      font-size: 0.78rem;
+      color: var(--gold-dim);
+      font-style: italic;
+    }
+
+    .ex-sets {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .ex-arrow {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* ── COACH SECTION ── */
+    .coach-section {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .coach-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      border: 2px solid var(--gold-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .coach-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      color: var(--gold);
+    }
+
+    .coach-text {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── TIP CARDS ── */
+    .tip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .tip-card {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .tip-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .tip-icon {
+      font-size: 1.2rem;
+    }
+
+    .tip-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .tip-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── LOG WORKOUT FORM ── */
+    .log-section {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .log-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
+    }
+
+    .log-form-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .log-field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .log-field input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--bg4);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .log-field input:focus {
+      border-color: var(--gold);
+    }
+
+    .log-field input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .log-field input:-webkit-autofill,
+    .log-field input:-webkit-autofill:hover,
+    .log-field input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0px 1000px #1E1E1E inset;
+      -webkit-text-fill-color: var(--text);
+      caret-color: var(--text);
+    }
+
+    .btn-log {
+      background: var(--gold);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.88rem;
+      font-family: 'DM Sans', sans-serif;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-log:hover {
+      opacity: 0.85;
+    }
+
+    /* ── LOGGED WORKOUTS LIST ── */
+    .logged-section {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .logged-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .logged-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+    }
+
+    .total-count {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg3);
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .logged-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--bg3);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid var(--bg4);
+    }
+
+    .logged-item-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .logged-item-detail {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid #444;
+      color: #888;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .btn-delete:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* ── FLOATING BUTTONS (bottom right) ── */
+    .float-btns {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 10px;
+      z-index: 50;
+    }
+
+    .float-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    .float-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .float-btn-grey {
+      background: var(--bg3);
+      color: var(--text-muted);
+      border: 1px solid var(--bg4);
+    }
+
+    .float-btn-gold {
+      background: var(--gold);
+      color: #000;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 700px) {
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tip-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .log-form-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .btn-log {
+        grid-column: 1 / -1;
+      }
+
+      .dash-username {
+        font-size: 2rem;
+      }
+    }
+
+    /* ── MODALS (Split + Preferences) ── */
+    .modal-overlay {
+      display: flex;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .modal-overlay.open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--bg2);
+      border: 1px solid var(--bg3);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: 90%;
+      max-width: 460px;
+      max-height: 80vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      contain: layout style;
+    }
+
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    /* Split options */
+    .split-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: var(--bg3);
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .split-option:hover {
+      border-color: var(--gold-dim);
+    }
+
+    .split-option.selected {
+      border-color: var(--gold);
+    }
+
+    .split-option-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 2px;
+    }
+
+    .split-option-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .split-option-icon {
+      font-size: 1.3rem;
+    }
+
+    /* ── PREFERENCES MODAL STYLES ── */
+    .pref-section-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin: 18px 0 8px;
+    }
+
+    .pref-section-title:first-of-type {
+      margin-top: 0;
+    }
+
+    .pref-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--bg3);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .pref-option:hover {
+      border-color: var(--gold-dim);
+    }
+
+    .pref-option.selected {
+      border-color: var(--gold);
+      background: rgba(245, 197, 24, 0.07);
+    }
+
+    .pref-option-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+
+    .pref-option-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .pref-option-check {
+      font-size: 1.1rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .pref-option.selected .pref-option-check {
+      opacity: 1;
+    }
+
+    .modal-close {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      background: var(--bg4);
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--bg3);
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar" style="display:none">
+    <a href="dashboard.html" class="navbar-brand">FITCOACH PRO</a>
+    <ul class="nav-links">
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="profile.html">Profile</a></li>
+      <li>
+        <a href="profile.html" class="nav-avatar-link">
+          <img id="navAvatar" src="/images/default-avatar.svg" alt="Profile" class="nav-avatar">
+          <span id="navName"></span>
+        </a>
+      </li>
+      <li><button id="logoutBtn">Logout</button></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main id="mainContent" style="display:none">
+    <div class="dashboard-wrapper">
+
+      <!-- HEADER -->
+      <div class="dash-header">
+        <div>
+          <div class="dash-greeting">Training Program</div>
+          <div class="dash-username" id="dashUsername">A</div>
+          <div class="dash-meta">
+            <span class="split-badge" id="splitBadge">—</span>
+            <span class="split-badge pref-badge" id="levelBadge">—</span>
+            <span class="split-badge pref-badge" id="trainingBadge">—</span>
+            <span class="bmi-badge">BMI: <strong id="dashBmi">—</strong> <span class="bmi-cat"
+                id="dashBmiCat">—</span></span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="dashboard.html" class="btn-icon" title="Home">🏠</a>
+          <button class="btn-icon" id="openPrefsModal" title="Change Level / Training">⚙️</button>
+          <button class="btn-icon" id="openSplitModal" title="Change Split">＋</button>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <span class="stat-icon">🔥</span>
+            <span class="stat-label-badge badge-active">Active</span>
+          </div>
+          <div class="stat-value" id="statDays">—</div>
+          <div class="stat-desc">Days per Week</div>
+          <div class="stat-bar-row" id="statDaysBar"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <span class="stat-icon">💪</span>
+            <span class="stat-label-badge badge-total">Total</span>
+          </div>
+          <div class="stat-value" id="statExercises">—</div>
+          <div class="stat-desc">Weekly Exercises</div>
+          <div class="stat-bar-row" id="statExBar"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <span class="stat-icon">⚡</span>
+            <span class="stat-label-badge badge-intensity">Intensity</span>
+          </div>
+          <div class="stat-value" id="statIntensity">—</div>
+          <div class="stat-desc">Training Volume</div>
+          <div class="stat-bar-row" id="statIntBar"></div>
+        </div>
+      </div>
+
+      <!-- DAY TABS -->
+      <div class="day-tabs-wrapper">
+        <div class="day-tabs" id="dayTabs"></div>
+      </div>
+
+      <!-- WORKOUT PLAN SECTION -->
+      <div class="workout-section" id="workoutPlanSection">
+        <div class="workout-section-header">
+          <div>
+            <div class="workout-section-title" id="dayTitle">Loading...</div>
+            <div class="workout-section-sub" id="daySubtitle"></div>
+          </div>
+          <span class="ex-count-badge" id="exCountBadge">— Exercises</span>
+        </div>
+        <div class="exercise-list" id="exerciseList"></div>
+      </div>
+
+      <!-- COACH RECOMMENDATION -->
+      <div class="coach-section" id="coachSection" style="display:none">
+        <div class="coach-avatar">🏋️</div>
+        <div>
+          <div class="coach-title">Coach Recommendation</div>
+          <div class="coach-text" id="coachText"></div>
+        </div>
+      </div>
+
+      <!-- TIPS -->
+      <div class="tip-grid">
+        <div class="tip-card">
+          <div class="tip-card-head">
+            <span class="tip-icon">📈</span>
+            <span class="tip-title">Progressive Overload</span>
+          </div>
+          <div class="tip-text">Gradually increase weight, reps, or sets to continually challenge your muscles and drive
+            growth.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-head">
+            <span class="tip-icon">😴</span>
+            <span class="tip-title">Recovery &amp; Sleep</span>
+          </div>
+          <div class="tip-text">Muscles grow during rest. Aim for 7–9 hours of quality sleep and take rest days
+            seriously.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-head">
+            <span class="tip-icon">🥗</span>
+            <span class="tip-title">Nutrition Matters</span>
+          </div>
+          <div class="tip-text">Fuel your workouts with adequate protein (0.8–1g per lb) and maintain a calorie surplus
+            or deficit based on goals.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-card-head">
+            <span class="tip-icon">✅</span>
+            <span class="tip-title">Form Over Ego</span>
+          </div>
+          <div class="tip-text">Perfect technique prevents injuries and maximises muscle engagement. Leave your ego at
+            the door.</div>
+        </div>
+      </div>
+
+      <!-- LOG WORKOUT FORM -->
+      <div class="log-section">
+        <div class="log-section-title">Log a Workout</div>
+        <form id="workoutForm">
+          <input type="hidden" id="workoutId">
+          <div class="log-form-row">
+            <div class="log-field">
+              <label>Exercise</label>
+              <input type="text" id="exercise" placeholder="e.g. Bench Press" required>
+            </div>
+            <div class="log-field">
+              <label>Sets</label>
+              <input type="number" id="sets" placeholder="4" required>
+            </div>
+            <div class="log-field">
+              <label>Reps</label>
+              <input type="number" id="reps" placeholder="10" required>
+            </div>
+            <button type="submit" class="btn-log">Save</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- LOGGED WORKOUTS -->
+      <div class="logged-section">
+        <div class="logged-section-header">
+          <div class="logged-section-title">Logged Workouts</div>
+          <span class="total-count">Total: <span id="workoutCount">0</span></span>
+        </div>
+        <div id="workoutList">
+          <div class="empty-state">No workouts logged yet. Start tracking above! 💪</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SPLIT SELECTOR MODAL -->
+  <div class="modal-overlay" id="splitModal">
+    <div class="modal-box">
+      <div class="modal-title">Choose Your Training Split</div>
+      <div id="splitList"></div>
+      <button class="modal-close" id="closeSplitModal">Close</button>
+    </div>
+  </div>
+
+  <!-- PREFERENCES MODAL (Level + Training Type) -->
+  <div class="modal-overlay" id="prefsModal">
+    <div class="modal-box">
+      <div class="modal-title">⚙️ Preferences</div>
+
+      <div class="pref-section-title">Fitness Level</div>
+      <div id="levelList">
+        <div class="pref-option" data-level="beginner">
+          <div>
+            <div class="pref-option-label">🌱 Beginner</div>
+            <div class="pref-option-desc">New to training · Focus on form and foundations</div>
+          </div>
+          <span class="pref-option-check">✓</span>
+        </div>
+        <div class="pref-option" data-level="intermediate">
+          <div>
+            <div class="pref-option-label">⚡ Intermediate</div>
+            <div class="pref-option-desc">6–18 months experience · Ready to push harder</div>
+          </div>
+          <span class="pref-option-check">✓</span>
+        </div>
+        <div class="pref-option" data-level="professional">
+          <div>
+            <div class="pref-option-label">🔥 Professional</div>
+            <div class="pref-option-desc">2+ years · Advanced techniques and heavy loads</div>
+          </div>
+          <span class="pref-option-check">✓</span>
+        </div>
+      </div>
+
+      <div class="pref-section-title">Training Location</div>
+      <div id="trainingList">
+        <div class="pref-option" data-training="gym">
+          <div>
+            <div class="pref-option-label">🏋️ Gym</div>
+            <div class="pref-option-desc">Full equipment · Barbells, machines, cables</div>
+          </div>
+          <span class="pref-option-check">✓</span>
+        </div>
+        <div class="pref-option" data-training="home">
+          <div>
+            <div class="pref-option-label">🏠 Home</div>
+            <div class="pref-option-desc">Bodyweight + minimal gear · No gym needed</div>
+          </div>
+          <span class="pref-option-check">✓</span>
+        </div>
+      </div>
+
+      <button class="modal-close" id="closePrefsModal">Close</button>
+    </div>
+  </div>
+
+  <!-- FLOATING BUTTONS -->
+  <div class="float-btns">
+    <a href="profile.html" class="float-btn float-btn-grey" title="Profile">👤</a>
+    <button class="float-btn float-btn-gold" id="scrollLogBtn" title="Log Workout">＋</button>
+  </div>
+
+  <script src="js/toast.js"></script>
+  <script src="js/dashboard-new.js"></script>
+</body>
+
+</html>

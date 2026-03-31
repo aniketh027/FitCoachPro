@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Your Profile - FitCoach Pro</title>
+  <link rel="stylesheet" href="css/onboarding.css">
+</head>
+<body>
+
+  <div class="bg-glow-top"></div>
+  <div class="onboarding-wrapper">
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- STEP INDICATORS -->
+    <div class="step-indicators" id="stepIndicators"></div>
+
+    <!-- SLIDES CONTAINER -->
+    <div class="slides" id="slides">
+
+      <!-- STEP 1: WELCOME -->
+      <div class="slide active" data-step="1">
+        <div class="slide-icon">👋</div>
+        <h1>Welcome to <span>FitCoach Pro</span></h1>
+        <p class="subtitle">Let's set up your profile in just a few steps so we can build your personalized workout plan.</p>
+        <button class="btn-next" onclick="nextStep()">Let's Go →</button>
+      </div>
+
+      <!-- STEP 2: BASIC INFO -->
+      <div class="slide" data-step="2">
+        <div class="slide-icon">👤</div>
+        <h2>Tell us about yourself</h2>
+        <p class="subtitle">Basic info to personalize your experience</p>
+
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="name" placeholder="e.g. Aniketh">
+          <span class="field-error" id="nameError"></span>
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="option-cards" id="genderOptions">
+            <div class="option-card" onclick="selectOption('gender', 'male', this)">
+              <span class="option-icon">♂️</span>
+              <span>Male</span>
+            </div>
+            <div class="option-card" onclick="selectOption('gender', 'female', this)">
+              <span class="option-icon">♀️</span>
+              <span>Female</span>
+            </div>
+            <div class="option-card" onclick="selectOption('gender', 'other', this)">
+              <span class="option-icon">⚧️</span>
+              <span>Other</span>
+            </div>
+          </div>
+          <span class="field-error" id="genderError"></span>
+        </div>
+
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="age" placeholder="e.g. 21" min="10" max="100">
+          <span class="field-error" id="ageError"></span>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep()">← Back</button>
+          <button class="btn-next" onclick="nextStep()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: BODY STATS -->
+      <div class="slide" data-step="3">
+        <div class="slide-icon">📏</div>
+        <h2>Your body stats</h2>
+        <p class="subtitle">Used to calculate your BMI and tailor your plan</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="weight" placeholder="e.g. 70" min="20" max="300"
+                   oninput="updateBMIPreview()">
+            <span class="field-error" id="weightError"></span>
+          </div>
+          <div class="form-group">
+            <label>Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 175" min="100" max="250"
+                   oninput="updateBMIPreview()">
+            <span class="field-error" id="heightError"></span>
+          </div>
+        </div>
+
+        <!-- LIVE BMI PREVIEW -->
+        <div class="bmi-preview" id="bmiPreview" style="display:none;">
+          <div class="bmi-value" id="bmiValue">--</div>
+          <div class="bmi-label" id="bmiLabel">--</div>
+          <div class="bmi-bar-wrap">
+            <div class="bmi-bar-track">
+              <div class="bmi-bar-fill" id="bmiBarFill"></div>
+              <div class="bmi-bar-marker" id="bmiBarMarker"></div>
+            </div>
+            <div class="bmi-bar-labels">
+              <span>Underweight</span>
+              <span>Normal</span>
+              <span>Overweight</span>
+              <span>Obese</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep()">← Back</button>
+          <button class="btn-next" onclick="nextStep()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: FITNESS LEVEL -->
+      <div class="slide" data-step="4">
+        <div class="slide-icon">🏋️</div>
+        <h2>What's your fitness level?</h2>
+        <p class="subtitle">Be honest — we'll build the right plan for you</p>
+
+        <div class="big-option-cards" id="levelOptions">
+          <div class="big-option-card" onclick="selectOption('level', 'beginner', this)">
+            <div class="big-option-icon">🌱</div>
+            <div class="big-option-title">Beginner</div>
+            <div class="big-option-desc">Just starting out, building foundations</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('level', 'intermediate', this)">
+            <div class="big-option-icon">💪</div>
+            <div class="big-option-title">Intermediate</div>
+            <div class="big-option-desc">Some experience, ready to push harder</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('level', 'professional', this)">
+            <div class="big-option-icon">🔥</div>
+            <div class="big-option-title">Professional</div>
+            <div class="big-option-desc">Advanced athlete, high intensity training</div>
+          </div>
+        </div>
+        <span class="field-error" id="levelError"></span>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep()">← Back</button>
+          <button class="btn-next" onclick="nextStep()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: WORKOUT STYLE -->
+      <div class="slide" data-step="5">
+        <div class="slide-icon">📋</div>
+        <h2>Pick your workout style</h2>
+        <p class="subtitle">How do you want to structure your training?</p>
+
+        <div class="big-option-cards" id="styleOptions">
+          <div class="big-option-card" onclick="selectOption('style', 'fullbody', this)">
+            <div class="big-option-icon">🏃</div>
+            <div class="big-option-title">Full Body</div>
+            <div class="big-option-desc">Train your whole body every session</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('style', 'pushpulllegs', this)">
+            <div class="big-option-icon">🔄</div>
+            <div class="big-option-title">Push Pull Legs</div>
+            <div class="big-option-desc">Classic muscle split routine</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('style', 'upperlower', this)">
+            <div class="big-option-icon">⚖️</div>
+            <div class="big-option-title">Upper Lower</div>
+            <div class="big-option-desc">Balanced strength split</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('style', 'brosplit', this)">
+            <div class="big-option-icon">💪</div>
+            <div class="big-option-title">Bro Split</div>
+            <div class="big-option-desc">One muscle group per day for maximum focus</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('style', 'arnoldsplit', this)">
+            <div class="big-option-icon">🏛️</div>
+            <div class="big-option-title">Arnold Split</div>
+            <div class="big-option-desc">High-volume split targeting muscles twice weekly</div>
+          </div>
+        </div>
+        <span class="field-error" id="styleError"></span>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep()">← Back</button>
+          <button class="btn-next" onclick="nextStep()">Continue →</button>
+        </div>
+      </div>
+
+      <!-- STEP 6: TRAINING TYPE -->
+      <div class="slide" data-step="6">
+        <div class="slide-icon">📍</div>
+        <h2>Where will you train?</h2>
+        <p class="subtitle">We'll pick exercises that fit your environment</p>
+
+        <div class="big-option-cards two-col" id="trainingOptions">
+          <div class="big-option-card" onclick="selectOption('trainingType', 'home', this)">
+            <div class="big-option-icon">🏠</div>
+            <div class="big-option-title">Home</div>
+            <div class="big-option-desc">No equipment needed</div>
+          </div>
+          <div class="big-option-card" onclick="selectOption('trainingType', 'gym', this)">
+            <div class="big-option-icon">🏢</div>
+            <div class="big-option-title">Gym</div>
+            <div class="big-option-desc">Full equipment available</div>
+          </div>
+        </div>
+        <span class="field-error" id="trainingError"></span>
+
+        <div class="btn-row">
+          <button class="btn-back" onclick="prevStep()">← Back</button>
+          <button class="btn-next" onclick="submitOnboarding()">Finish Setup 🎉</button>
+        </div>
+      </div>
+
+      <!-- STEP 7: DONE -->
+      <div class="slide" data-step="7">
+        <div class="slide-icon success-icon">🎉</div>
+        <h2>You're all set!</h2>
+        <p class="subtitle">Your personalized workout plan is ready. Time to start training!</p>
+        <div class="loader" id="redirectLoader">
+          <div class="loader-dot"></div>
+          <div class="loader-dot"></div>
+          <div class="loader-dot"></div>
+        </div>
+        <p class="redirect-msg">Taking you to your dashboard…</p>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/toast.js"></script>
+  <script src="js/onboarding.js"></script>
+</body>
+</html>
